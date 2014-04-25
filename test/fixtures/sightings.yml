@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  seen_when: 2014-04-23 16:22:18
+  city: MyString
+  state: MyString
+  shape: MyString
+  duration: MyString
+  summary: MyText
+  posted_on: 2014-04-23
+
+two:
+  seen_when: 2014-04-23 16:22:18
+  city: MyString
+  state: MyString
+  shape: MyString
+  duration: MyString
+  summary: MyText
+  posted_on: 2014-04-23
