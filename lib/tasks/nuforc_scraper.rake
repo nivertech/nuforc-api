@@ -1,16 +1,18 @@
-require 'nokogiri'
-require 'open-uri'
-require 'date'
+namespace :nuforc_scraper do
 
-class NUFORCScraper
+  require 'nokogiri'
+  require 'open-uri'
+  require 'date'
 
   url = 'http://www.nuforc.org/webreports/ndxevent.html'
   @doc = Nokogiri::HTML(open(url))
 
-  def get_history
+  desc "Retrieve past months and their total sightings count"
+  task get_previous_months: :environment do
     months = []
     rows = @doc.css('tbody>tr')
-    rows.pop
+    rows.shift # remove current month
+    rows.pop # remove undefined sightings
     rows.each do |row|
       month = {
         :date => Date.strptime(row.css('a').text, '%m/%Y'),
@@ -19,18 +21,12 @@ class NUFORCScraper
       }
       months << month
     end
+
+    puts months
   end
 
-  # run on the first of every month
-  # insert previous month sightings into db
-  def get_previous_month_sightings
-  end
-
-  # should probably move current month methods
-  # to the controller
-
-  # current month w/ count from scraper
-  def get_current_month_count
+  desc "Get the current month and its current sightings total count"
+  task get_current_month: :environment do
     first_row = @doc.css('tbody>tr').first
 
     return {
@@ -38,24 +34,16 @@ class NUFORCScraper
       count: first_row.css('font').last.text,
       link: first_row.at_xpath('.//font/a/@href').to_s
     }
+
   end
 
-  def can_you_see_me
-    puts "Yes, I can see you."
-  end
-
-  # current month from date
-  def get_current_month
+  desc "Scrape a month for sightings data"
+  task scrape_sightings: :environment do
     # ndxeYYYYMM.html
     d = Date.parse(Time.now.to_s)
     d = d.strftime("%Y%m")
-    month_url = "ndxe#{d}.html"
+    month = "ndxe#{d}.html"
 
-    get_sightings(month_url)
-  end
-
-  # get all sightings in current month
-  def get_sightings(month)
     sightings = []
     # http://www.nuforc.org/webreports/ndxe201404.html
     month_url = "http://www.nuforc.org/webreports/#{month}"
@@ -71,10 +59,11 @@ class NUFORCScraper
         shape: td[3].text,
         duration: td[4].text,
         summary: td[5].text,
-        post_on: td[6].text
+        posted_on: td[6].text
       }
       sightings << sighting
     end
+
     puts sightings
   end
 
