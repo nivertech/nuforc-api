@@ -11,14 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140430204933) do
+ActiveRecord::Schema.define(version: 20140502203102) do
 
   create_table "months", force: true do |t|
-    t.date     "date"
     t.integer  "count"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "link"
+    t.string   "year"
+    t.string   "month"
   end
 
   create_table "sightings", force: true do |t|

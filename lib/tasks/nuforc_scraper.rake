@@ -9,25 +9,26 @@ namespace :nuforc_scraper do
 
   desc "Retrieve past months and their total sightings count"
   task get_previous_months: :environment do
-    months = []
     rows = @doc.css('tbody>tr')
     rows.shift # remove current month
     rows.pop # remove undefined sightings
     rows.each do |row|
       # convert string to date object
       date = Date.strptime(row.css('a').text, '%m/%Y')
-      # format date to January 2014
-      date = date.strftime("%B %Y")
+      # get year and month from date object
+      year = date.strftime("%Y")
+      month = date.strftime("%m")
 
-      month = {
-        :date => date,
+      group = {
+        :year => year.to_s,
+        :month => month.to_s,
         :count => row.css('font').last.text,
         :link => row.at_xpath('.//font/a/@href').to_s
       }
-      months << month
+      #months << month
+      Month.create(group)
     end
 
-    puts months
   end
 
   desc "Get the current month and its current sightings total count"
