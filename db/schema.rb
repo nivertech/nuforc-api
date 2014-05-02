@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140502203102) do
+ActiveRecord::Schema.define(version: 20140502203652) do
 
   create_table "months", force: true do |t|
     t.integer  "count"
@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 20140502203102) do
     t.string   "shape"
     t.string   "duration"
     t.text     "summary"
-    t.date     "posted_on"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

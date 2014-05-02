@@ -25,14 +25,13 @@ namespace :nuforc_scraper do
         :count => row.css('font').last.text,
         :link => row.at_xpath('.//font/a/@href').to_s
       }
-      #months << month
+
       Month.create(group)
     end
-
   end
 
-  desc "Get the current month and its current sightings total count"
-  task get_current_month: :environment do
+  desc "Get the latest month listed and its current sightings total count"
+  task get_latest_month: :environment do
     first_row = @doc.css('tbody>tr').first
 
     return {
@@ -73,7 +72,6 @@ namespace :nuforc_scraper do
         shape: td[3].text,
         duration: td[4].text,
         summary: td[5].text,
-        posted_on: td[6].text
       }
       sightings << sighting
     end
