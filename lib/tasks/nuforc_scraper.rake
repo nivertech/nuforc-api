@@ -14,8 +14,13 @@ namespace :nuforc_scraper do
     rows.shift # remove current month
     rows.pop # remove undefined sightings
     rows.each do |row|
+      # convert string to date object
+      date = Date.strptime(row.css('a').text, '%m/%Y')
+      # format date to January 2014
+      date = date.strftime("%B %Y")
+
       month = {
-        :date => Date.strptime(row.css('a').text, '%m/%Y'),
+        :date => date,
         :count => row.css('font').last.text,
         :link => row.at_xpath('.//font/a/@href').to_s
       }
@@ -34,7 +39,6 @@ namespace :nuforc_scraper do
       count: first_row.css('font').last.text,
       link: first_row.at_xpath('.//font/a/@href').to_s
     }
-
   end
 
   desc "Scrape a month for sightings data"
@@ -51,9 +55,18 @@ namespace :nuforc_scraper do
 
     rows = html.css('tbody>tr')
     rows.each do |row|
+
       td = row.css('td')
+      date = row.css('a').text
+
+      if (DateTime.strptime(date, '%-m/%-d/%y %H:%M'))
+        pattern = '%-m/%-d/%y %H:%M'
+      else 
+        pattern = '%-m/%-d/%y'
+      end
+
       sighting = {
-        seen_when: DateTime.strptime(row.css('a').text, '%-m/%-d/%y %H:%M'),
+        seen_when: DateTime.strptime(date, pattern),
         city: td[1].text,
         state: td[2].text,
         shape: td[3].text,
