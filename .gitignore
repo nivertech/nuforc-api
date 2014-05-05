@@ -18,3 +18,7 @@
 # ignore vim swp
 *.swp
 /*/**/*.swp
+
+# ignore .DS_Store
+*.DS_Store
+/*/**/*.DS_Store
