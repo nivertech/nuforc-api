@@ -48,20 +48,18 @@ namespace :nuforc_scraper do
     d = d.strftime("%Y%m")
     month = "ndxe#{d}.html"
 
-    sightings = []
     # http://www.nuforc.org/webreports/ndxe201404.html
     month_url = "http://www.nuforc.org/webreports/#{month}"
     html = Nokogiri::HTML(open(month_url))
 
     rows = html.css('tbody>tr')
     rows.each do |row|
-
       td = row.css('td')
       date = row.css('a').text
 
       if (DateTime.strptime(date, '%-m/%-d/%y %H:%M'))
         pattern = '%-m/%-d/%y %H:%M'
-      else 
+      else
         pattern = '%-m/%-d/%y'
       end
 
@@ -73,10 +71,9 @@ namespace :nuforc_scraper do
         duration: td[4].text,
         summary: td[5].text,
       }
-      sightings << sighting
-    end
 
-    puts sightings
+      Sighting.create(sighting)
+    end
   end
 
 end
