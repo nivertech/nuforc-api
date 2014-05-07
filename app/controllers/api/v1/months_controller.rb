@@ -16,6 +16,20 @@ module Api
 
         render json: @month
       end
+
+      # GET /YYYY
+      # GET /YYYY.json
+      def year
+        year = Month.where(year: params[:year])
+        render json: year
+      end
+
+      # GET /YYYY/MM
+      # GET /YYYY/MM.json
+      def month
+        month = Month.where(year: params[:year], month: params[:month])
+        render json: month
+      end
     end
   end
 end

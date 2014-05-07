@@ -16,6 +16,15 @@ module Api
 
         render json: @sighting
       end
+
+      def day
+        :year = DateTime.strftime(:seen_when, '%Y')
+        :month = DateTime.strftime(:seen_when, '%m')
+        :day = DateTime.strftime(:seen_when, '%d')
+        
+        day = Sighting.where(year: params[:year], month: params[:month], day: params[:day])
+        render json: day
+      end
     end
   end
 end
