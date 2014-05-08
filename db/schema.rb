@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140508173811) do
+ActiveRecord::Schema.define(version: 20140508174217) do
 
   create_table "sightings", force: true do |t|
     t.string   "city"
@@ -23,7 +23,8 @@ ActiveRecord::Schema.define(version: 20140508173811) do
     t.datetime "updated_at"
     t.string   "day"
     t.string   "time"
-    t.integer  "month_id"
+    t.string   "year"
+    t.string   "month"
   end
 
 end
