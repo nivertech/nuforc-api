@@ -2,28 +2,45 @@ module Api
   module V1
     class SightingsController < ApplicationController
       # GET /sightings
-      # GET /sightings.json
       def index
         @sightings = Sighting.all
 
         render json: @sightings
       end
 
-      # GET /sightings/1
-      # GET /sightings/1.json
-      def show
-        @sighting = Sighting.find(params[:id])
+      # GET /YYYY
+      def year
+        @sightings = Month.where(year: params[:year])
 
-        render json: @sighting
+        render json: @sightings
       end
 
+      # GET /YYYY/MM
+      def month
+        @sightings = Month.where(year: params[:year], month: params[:month])
+
+        render json: @sightings
+      end
+
+      # GET /YYYY/MM/DD
       def day
-        :year = DateTime.strftime(:seen_when, '%Y')
-        :month = DateTime.strftime(:seen_when, '%m')
-        :day = DateTime.strftime(:seen_when, '%d')
-        
-        day = Sighting.where(year: params[:year], month: params[:month], day: params[:day])
-        render json: day
+        # need to check year and month
+        @sightings = Sighting.where(year: params[:year], month: params[:month], day: params[:day])
+
+        render json: @sightings
+      end
+
+      # GET /Rochester
+      def city
+        @sightings = Sighting.where(city: params[:city])
+
+        render json: @sightings
+      private
+
+      def default_serializer_options
+        {
+          root: false
+        }
       end
     end
   end

@@ -1,4 +1,3 @@
 class SightingSerializer < ActiveModel::Serializer
-  attributes :day, :time, :city, :state, :shape, :duration, :summary
-  belongs_to :month
+  attributes :year, :month, :day, :time, :city, :state, :shape, :duration, :summary
 end

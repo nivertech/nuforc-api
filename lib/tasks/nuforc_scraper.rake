@@ -4,49 +4,25 @@ namespace :nuforc_scraper do
   require 'open-uri'
   require 'date'
 
-  url = 'http://www.nuforc.org/webreports/ndxevent.html'
-  @doc = Nokogiri::HTML(open(url))
+  def get_previous_months
+    url = 'http://www.nuforc.org/webreports/ndxevent.html'
+    html = Nokogiri::HTML(open(url))
 
-  desc "Retrieve past months and their total sightings count"
-  task get_previous_months: :environment do
-    rows = @doc.css('tbody>tr')
-    rows.shift # remove current month
-    rows.pop # remove undefined sightings
+    month_links = []
+
+    rows = html.css('tbody>tr')
+    rows.pop
     rows.each do |row|
-      # convert string to date object
-      date = Date.strptime(row.css('a').text, '%m/%Y')
-      # get year and month from date object
-      year = date.strftime("%Y")
-      month = date.strftime("%m")
+      link = row.at_xpath('.//font/a/@href').to_s
+      month_links << link
+    end
 
-      group = {
-        :year => year.to_s,
-        :month => month.to_s,
-        :count => row.css('font').last.text,
-        :link => row.at_xpath('.//font/a/@href').to_s
-      }
-
-      Month.create(group)
+    month_links.each do |link|
+      get_sightings(link)
     end
   end
 
-  desc "Get the latest month listed and its current sightings total count"
-  task get_latest_month: :environment do
-    first_row = @doc.css('tbody>tr').first
-
-    return {
-      date: first_row.css('a').text,
-      count: first_row.css('font').last.text,
-      link: first_row.at_xpath('.//font/a/@href').to_s
-    }
-  end
-
-  desc "Scrape a month for sightings data"
-  task scrape_sightings: :environment do
-    # ndxeYYYYMM.html
-    d = Date.parse(Time.now.to_s)
-    d = d.strftime("%Y%m")
-    month = "ndxe#{d}.html"
+  def get_sightings(month)
 
     # http://www.nuforc.org/webreports/ndxe201404.html
     month_url = "http://www.nuforc.org/webreports/#{month}"
@@ -63,17 +39,37 @@ namespace :nuforc_scraper do
         pattern = '%-m/%-d/%y'
       end
 
+      DateTime.strptime(date, pattern)
+
       sighting = {
-        seen_when: DateTime.strptime(date, pattern),
+        year: year,
+        month: month,
+        day: day,
+        time: time,
         city: td[1].text,
         state: td[2].text,
         shape: td[3].text,
         duration: td[4].text,
-        summary: td[5].text,
+        summary: td[5].text
       }
 
       Sighting.create(sighting)
     end
   end
+
+  desc "Retrieve past months and their total sightings count"
+  task scrape_previous_months: :environment do
+    get_previous_months
+  end
+
+  # desc "Get the latest month listed and its current sightings total count"
+  # task get_latest_month: :environment do
+    
+  # end
+
+  # desc "Scrape a month for sightings data"
+  # task scrape_sightings: :environment do
+    
+  # end
 
 end

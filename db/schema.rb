@@ -11,16 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140507022910) do
-
-  create_table "months", force: true do |t|
-    t.integer  "count"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "link"
-    t.string   "year"
-    t.string   "month"
-  end
+ActiveRecord::Schema.define(version: 20140508173811) do
 
   create_table "sightings", force: true do |t|
     t.string   "city"
@@ -32,6 +23,7 @@ ActiveRecord::Schema.define(version: 20140507022910) do
     t.datetime "updated_at"
     t.string   "day"
     t.string   "time"
+    t.integer  "month_id"
   end
 
 end
