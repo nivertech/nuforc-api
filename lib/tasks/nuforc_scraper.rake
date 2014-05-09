@@ -27,7 +27,7 @@ namespace :nuforc_scraper do
     # http://www.nuforc.org/webreports/ndxe201404.html
     month_url = "http://www.nuforc.org/webreports/#{month}"
     html = Nokogiri::HTML(open(month_url))
-    
+
     rows = html.css('tbody>tr')
     rows.each do |row|
       td = row.css('td')
@@ -42,6 +42,12 @@ namespace :nuforc_scraper do
       d = date_obj.strftime('%d')
       y = date_obj.strftime('%Y')
 
+      sighting_href = row.at_xpath('.//font/a/@href').to_s
+      sighting_url = "http://www.nuforc.org/webreports/#{sighting_href}"
+      sighting_html = Nokogiri::HTML(open(sighting_url))
+
+      full_summary = sighting_html.css('td')[1].text
+
       sighting = {
         year: y,
         month: m,
@@ -51,7 +57,8 @@ namespace :nuforc_scraper do
         state: td[2].text,
         shape: td[3].text,
         duration: td[4].text,
-        summary: td[5].text
+        summary: td[5].text,
+        full_summary: full_summary
       }
 
       Sighting.create(sighting)
