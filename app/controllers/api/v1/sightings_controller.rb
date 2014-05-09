@@ -10,14 +10,14 @@ module Api
 
       # GET /YYYY
       def year
-        @sightings = Month.where(year: params[:year])
+        @sightings = Sighting.where(year: params[:year])
 
         render json: @sightings
       end
 
       # GET /YYYY/MM
       def month
-        @sightings = Month.where(year: params[:year], month: params[:month])
+        @sightings = Sighting.where(year: params[:year], month: params[:month])
 
         render json: @sightings
       end
@@ -35,6 +35,8 @@ module Api
         @sightings = Sighting.where(city: params[:city])
 
         render json: @sightings
+      end
+
       private
 
       def default_serializer_options

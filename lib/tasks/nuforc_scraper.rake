@@ -27,24 +27,25 @@ namespace :nuforc_scraper do
     # http://www.nuforc.org/webreports/ndxe201404.html
     month_url = "http://www.nuforc.org/webreports/#{month}"
     html = Nokogiri::HTML(open(month_url))
-
+    
     rows = html.css('tbody>tr')
     rows.each do |row|
       td = row.css('td')
-      date = row.css('a').text
+      datetime = row.css('a').text
 
-      if (DateTime.strptime(date, '%-m/%-d/%y %H:%M'))
-        pattern = '%-m/%-d/%y %H:%M'
-      else
-        pattern = '%-m/%-d/%y'
-      end
+      date = /\d{1,2}\/\d{1,2}\/\d{2}/.match(datetime).to_s
+      time = /\d{2}\:\d{2}/.match(datetime).to_s
 
-      DateTime.strptime(date, pattern)
+      date_obj = Date.strptime(date, "%m/%d/%y")
+
+      m = date_obj.strftime('%m')
+      d = date_obj.strftime('%d')
+      y = date_obj.strftime('%Y')
 
       sighting = {
-        year: year,
-        month: month,
-        day: day,
+        year: y,
+        month: m,
+        day: d,
         time: time,
         city: td[1].text,
         state: td[2].text,
@@ -55,21 +56,12 @@ namespace :nuforc_scraper do
 
       Sighting.create(sighting)
     end
+
   end
 
   desc "Retrieve past months and their total sightings count"
   task scrape_previous_months: :environment do
     get_previous_months
   end
-
-  # desc "Get the latest month listed and its current sightings total count"
-  # task get_latest_month: :environment do
-    
-  # end
-
-  # desc "Scrape a month for sightings data"
-  # task scrape_sightings: :environment do
-    
-  # end
 
 end
