@@ -11,6 +11,9 @@ namespace :nuforc_scraper do
     month_links = []
 
     rows = html.css('tbody>tr')
+
+    # if current month is most recent posted then rows.shift
+
     rows.pop
     rows.each do |row|
       link = row.at_xpath('.//font/a/@href').to_s
@@ -46,7 +49,7 @@ namespace :nuforc_scraper do
       sighting_url = "http://www.nuforc.org/webreports/#{sighting_href}"
       sighting_html = Nokogiri::HTML(open(sighting_url))
 
-      full_summary = sighting_html.css('td')[1].text
+      full_summary = sighting_html.css('td')[1].to_s
 
       sighting = {
         year: y,
