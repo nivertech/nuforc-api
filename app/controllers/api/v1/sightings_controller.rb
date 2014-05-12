@@ -29,12 +29,16 @@ module Api
 
       # GET /YYYY/MM/DD
       def day
-        # need to check year and month
         @sightings = Sighting.where(year: params[:year], month: params[:month], day: params[:day])
 
         render json: @sightings
       end
 
+      # GET /MM/DD
+      def birthday
+        @sightings = Sighting.where(month: params[:month], day: params[:day])
+
+        render json: @sightings
       # GET /NY
       def state
         @sightings = Sighting.where(state: params[:state])
@@ -79,7 +83,12 @@ module Api
           sighting_url = "http://www.nuforc.org/webreports/#{sighting_href}"
           sighting_html = Nokogiri::HTML(open(sighting_url))
 
-          full_summary = sighting_html.css('td')[1].text
+          begin
+            full_summary = sighting_html.css('td')[1].text
+          rescue NoMethodError => e
+            puts "#{e.message}, full_summary equals zero"
+            full_summary = 0
+          end
 
           sighting = {
             year: y,

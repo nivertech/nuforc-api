@@ -4,28 +4,8 @@ namespace :nuforc_scraper do
   require 'open-uri'
   require 'date'
 
-  def get_previous_months
-    url = 'http://www.nuforc.org/webreports/ndxevent.html'
-    html = Nokogiri::HTML(open(url))
-
-    month_links = []
-
-    rows = html.css('tbody>tr')
-
-    # if current month is most recent posted then rows.shift
-
-    rows.pop
-    rows.each do |row|
-      link = row.at_xpath('.//font/a/@href').to_s
-      month_links << link
-    end
-
-    month_links.each do |link|
-      get_sightings(link)
-    end
-  end
-
   def get_sightings(month)
+    puts "Month Link: #{month}"
 
     # http://www.nuforc.org/webreports/ndxe201404.html
     month_url = "http://www.nuforc.org/webreports/#{month}"
@@ -46,10 +26,16 @@ namespace :nuforc_scraper do
       y = date_obj.strftime('%Y')
 
       sighting_href = row.at_xpath('.//font/a/@href').to_s
+      puts "#{month} >> Report: #{date} at #{time}"
       sighting_url = "http://www.nuforc.org/webreports/#{sighting_href}"
       sighting_html = Nokogiri::HTML(open(sighting_url))
 
-      full_summary = sighting_html.css('td')[1].to_s
+      begin
+        full_summary = sighting_html.css('td')[1].text
+      rescue NoMethodError => e
+        puts "#{e.message}, full_summary equals zero"
+        full_summary = 0
+      end
 
       sighting = {
         year: y,
@@ -66,7 +52,30 @@ namespace :nuforc_scraper do
 
       Sighting.create(sighting)
     end
+  end
 
+  def get_previous_months
+    url = 'http://www.nuforc.org/webreports/ndxevent.html'
+    html = Nokogiri::HTML(open(url))
+
+    month_links = []
+
+    rows = html.css('tbody>tr')
+
+    d = Date.today.strftime("%m/%Y")
+    if (html.xpath('.//tbody/tr[1]/td[1]/font/a').text == d)
+      rows.shift
+    end
+
+    rows.pop
+    rows.each do |row|
+      href = row.at_xpath('.//font/a/@href').to_s
+      month_links << href
+    end
+
+    month_links.each do |link|
+      get_sightings(link)
+    end
   end
 
   desc "Retrieve past months and their total sightings count"

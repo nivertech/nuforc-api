@@ -8,6 +8,9 @@ UfoApi::Application.routes.draw do
       get ':year/:month', to: 'sightings#month'
       get ':year/:month/:day', to: 'sightings#day'
 
+      # for birthdays
+      get ':month/:day', to: 'sightings#birthday'
+
       get ':state', to: 'sightings#state'
       get ':state/:city', to: 'sightings#city'
     end
