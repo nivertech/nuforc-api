@@ -39,6 +39,8 @@ module Api
         @sightings = Sighting.where(month: params[:month], day: params[:day])
 
         render json: @sightings
+      end
+      
       # GET /NY
       def state
         @sightings = Sighting.where(state: params[:state])
