@@ -5,8 +5,8 @@ gem 'rails', '4.0.4'
 
 gem 'rails-api'
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+# Use Postgres as the database for Active Record
+gem 'pg'
 
 # use nokogiri for scraping
 gem 'nokogiri'
