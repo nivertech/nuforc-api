@@ -29,7 +29,13 @@ GEM
       tzinfo (~> 0.3.37)
     arel (4.0.2)
     builder (3.1.4)
+    em-synchrony (1.0.3)
+      eventmachine (>= 1.0.0.beta.1)
     erubis (2.7.0)
+    eventmachine (1.0.3)
+    faye-websocket (0.7.3)
+      eventmachine (>= 0.12.0)
+      websocket-driver (>= 0.3.1)
     hike (1.2.3)
     i18n (0.6.9)
     mail (2.5.4)
@@ -45,6 +51,11 @@ GEM
     polyglot (0.3.4)
     rack (1.5.2)
     rack-cors (0.2.9)
+    rack-stream (0.0.5)
+      em-synchrony
+      eventmachine
+      faye-websocket
+      rack
     rack-test (0.6.2)
       rack (>= 1.0)
     rails (4.0.4)
@@ -80,6 +91,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.39)
+    websocket-driver (0.3.3)
 
 PLATFORMS
   ruby
@@ -89,5 +101,6 @@ DEPENDENCIES
   nokogiri
   pg
   rack-cors
+  rack-stream
   rails (= 4.0.4)
   rails-api
