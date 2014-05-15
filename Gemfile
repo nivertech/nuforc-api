@@ -17,9 +17,6 @@ gem 'rack-cors', :require => 'rack/cors'
 # use to control JSON output
 gem "active_model_serializers"
 
-# use rack stream for http streaming
-gem 'rack-stream'
-
 # To use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.0.0'
 
