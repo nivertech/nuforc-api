@@ -26,16 +26,7 @@ namespace :nuforc_scraper do
       y = date_obj.strftime('%Y')
 
       sighting_href = row.at_xpath('.//font/a/@href').to_s
-      # puts "#{month} >> Report: #{date} at #{time}"
       sighting_url = "http://www.nuforc.org/webreports/#{sighting_href}"
-      # sighting_html = Nokogiri::HTML(open(sighting_url))
-
-      # begin
-      #   full_summary = sighting_html.css('td')[1].text
-      # rescue NoMethodError => e
-      #   puts "#{e.message}, full_summary equals zero"
-      #   full_summary = 0
-      # end
 
       sighting = {
         year: y,
@@ -48,7 +39,6 @@ namespace :nuforc_scraper do
         duration: td[4].text,
         summary: td[5].text,
         link: sighting_url
-        # full_summary: full_summary
       }
 
       Sighting.create(sighting)
