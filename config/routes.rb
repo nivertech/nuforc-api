@@ -4,15 +4,15 @@ UfoApi::Application.routes.draw do
       get 'all', to: 'sightings#index'
       get 'latest', to: 'sightings#current_month'
       
-      get ':year', to: 'sightings#year'
-      get ':year/:month', to: 'sightings#month'
-      get ':year/:month/:day', to: 'sightings#day'
+      get 'date/:year', to: 'sightings#year'
+      get 'date/:year/:month', to: 'sightings#month'
+      get 'date/:year/:month/:day', to: 'sightings#day'
 
       # for birthdays
-      get ':month/:day', to: 'sightings#birthday'
+      get 'birthday/:month/:day', to: 'sightings#birthday'
 
-      get ':state', to: 'sightings#state'
-      get ':state/:city', to: 'sightings#city'
+      get 'location/:state', to: 'sightings#state'
+      get 'location/:state/:city', to: 'sightings#city'
     end
   end
 end
