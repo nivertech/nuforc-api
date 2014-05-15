@@ -27,7 +27,7 @@ namespace :nuforc_scraper do
 
       sighting_href = row.at_xpath('.//font/a/@href').to_s
       # puts "#{month} >> Report: #{date} at #{time}"
-      # sighting_url = "http://www.nuforc.org/webreports/#{sighting_href}"
+      sighting_url = "http://www.nuforc.org/webreports/#{sighting_href}"
       # sighting_html = Nokogiri::HTML(open(sighting_url))
 
       # begin
@@ -47,7 +47,7 @@ namespace :nuforc_scraper do
         shape: td[3].text,
         duration: td[4].text,
         summary: td[5].text,
-        link: "http://www.nuforc.org/webreports/#{sighting_href}"
+        link: sighting_url
         # full_summary: full_summary
       }
 
