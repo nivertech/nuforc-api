@@ -83,14 +83,6 @@ module Api
 
           sighting_href = row.at_xpath('.//td/font/a/@href').to_s
           sighting_url = "http://www.nuforc.org/webreports/#{sighting_href}"
-          # sighting_html = Nokogiri::HTML(open(sighting_url))
-
-          # begin
-          #   full_summary = sighting_html.css('td')[1].text
-          # rescue NoMethodError => e
-          #   puts "#{e.message}, full_summary equals zero"
-          #   full_summary = 0
-          # end
 
           sighting = {
             year: y,
