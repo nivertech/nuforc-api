@@ -21,7 +21,7 @@ module UfoApi
     # config.i18n.default_locale = :de
 
     # configure rack-cors
-    config.middleware.use Rack::Cors do
+    config.middleware.insert_before ActionDispatch::Static, Rack::Cors do
       allow do
         origins '*'
         resource '*', :headers => :any, :methods => [:get, :post, :options]
